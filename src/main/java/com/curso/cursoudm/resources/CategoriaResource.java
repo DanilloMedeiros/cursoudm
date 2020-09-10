@@ -3,28 +3,30 @@ package com.curso.cursoudm.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.curso.cursoudm.domain.Categoria;
+import com.curso.cursoudm.services.CategoriaService;
 
 @RestController
-@RequestMapping(value="/categorias")
+@RequestMapping(value="/categorias")//endpoint
 public class CategoriaResource {
+	
+	@Autowired
+	private CategoriaService service;
 
-	@RequestMapping(method=RequestMethod.GET)
-	public List<Categoria> Listar() {
+	@RequestMapping(value = "/{id}",method=RequestMethod.GET)//receber os dados atraves de um id
+	public ResponseEntity<?> find(@PathVariable Integer id) {//o id passado na url vai para a variavel do metodo
+		// ResEntity encapsula respostas HTTP; a ? significa que pode esperar qualquer tipo
 		
-		Categoria cat1 = new Categoria(1,"Informatica");
-		Categoria cat2 = new Categoria(2,"Escritorio");
+		Categoria obj = service.find(id);
 		
-		List<Categoria> lista = new ArrayList<>();
-		
-		lista.add(cat1);
-		lista.add(cat2);
-		
-		return lista;
+		return ResponseEntity.ok().body(obj);// ok() pra dizer que ocorreu com sucesso e body() pra mostrar os dados em obj
 	}
 	
 }
